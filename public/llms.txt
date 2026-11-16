@@ -7,15 +7,15 @@ Xylum is made by Sylvaris. It is built for independent consultants, freelancers,
 Key facts:
 
 - One record for each client. Every app points to it, so nothing is typed twice.
-- Every night Xylum closes quotes that ran out, raises repeating charges, warns before a renewal, moves contracts on when their dates come, and drafts a reminder when a late invoice is due one.
+- Every night Xylum closes quotes that ran out, raises repeating charges, warns before a domain, certificate or licence runs out, moves contracts on when their dates come, and drafts a reminder when a late invoice is due one.
 - Most apps open on one sentence that says what matters, not on a dashboard of numbers.
 - What Xylum writes for a person waits as a draft until they say yes. The assistant cannot approve its own work. Xylum can send payment reminders on its own only after a person switches that on.
-- Every change goes in an audit log. Xylum cannot edit or delete an entry: the database refuses it.
+- Changes to records go in an audit log. Xylum cannot edit or delete an entry: the database refuses it.
 - One step turns an accepted quote into a draft invoice with its lines filled in. Each project shows hours logged against its plan.
 - The assistant runs on a model from Anthropic. The key stays on the server, never in the app or its database.
-- Every app has its own screens, API and agent tools. An outside AI assistant can work with Xylum over MCP: it can read and prepare work, and it cannot send or delete.
+- Nearly every app has its own screens, API and agent tools. An outside AI assistant can work with Xylum over MCP: it can read and make edits that can be undone, and it cannot send or delete.
 - More than one company can live under one sign-in, each with its own records. Most apps can be switched off, company by company.
-- Five languages: English, Spanish, Portuguese, Italian and French.
+- Five languages: English, Spanish, Portuguese, Italian and French. Not every screen is translated yet.
 - Xylum is not an accounting system. It does not keep the ledger or file taxes. The accountant does.
 - Xylum is not for factories, warehouses or large firms with many departments.
 - Prices are not set yet.
