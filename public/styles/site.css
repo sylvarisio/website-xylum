@@ -620,6 +620,8 @@ section[id] { scroll-margin-top: 48px; }
 /* the browser's own marker: nothing here touches it */
 .qa-list summary { cursor: pointer; padding: 24px 0; font-size: 22px; line-height: 1.3; color: var(--xy-ink); }
 .qa-a { display: flex; flex-direction: column; gap: 12px; padding: 0 0 28px 20px; max-width: 640px; }
+/* .qa-text only carries the answer's schema.org `text` for search engines: it has no box */
+.qa-text { display: contents; }
 .qa-a p { font-size: 16px; line-height: 1.65; color: var(--xy-text-body); }
 
 /* a link inside a sentence (questions, the signup note, privacy): ink, underlined.
