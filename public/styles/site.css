@@ -691,17 +691,14 @@ section[id] { scroll-margin-top: 48px; }
 
 /* ══ privacy ═════════════════════════════════════════════════ */
 
-/* one column of 720: the draft notice, then four blocks between rules */
+/* one column of 720: blocks between rules. Kit v5 drew a draft notice above them; the page
+   is signed off (Sam, 2026-11-16), so the notice and its 56 gap are gone. */
 .note-col { max-width: 720px; margin: 80px auto 0; }
-.draft { display: flex; flex-direction: column; gap: 8px; border-top: 2px solid var(--xy-pending); padding-top: 15px; }
-.draft .label { color: var(--xy-pending-ink); }
-.draft p:not(.label) { font-size: 16px; line-height: 1.6; color: var(--xy-ink); }
-.kept { margin-top: 56px; border-bottom: 1px solid var(--xy-line); }
+.kept { border-bottom: 1px solid var(--xy-line); }
 .kept > section { display: flex; flex-direction: column; gap: 10px; padding: 28px 0; border-top: 1px solid var(--xy-line); }
 .kept p { font-size: 16px; line-height: 1.65; color: var(--xy-text-body); }
 
 @media (max-width: 999.98px) {
   .note-col { margin-top: 40px; }
-  .kept { margin-top: 32px; }
   .kept > section { padding: 20px 0; }
 }

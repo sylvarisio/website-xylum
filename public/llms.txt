@@ -34,7 +34,7 @@ Key facts:
 ## The apps
 
 - Work: Projects, Timesheets, Calendar, Todo, Helpdesk, Booking, Wiki
-- Money: Sales, Invoicing, Expenses, Subscriptions, Contracts, Purchasing (Reports is coming soon)
-- People and records: Contacts, CRM, Catalog, Templates (Library is coming soon)
+- Money: Sales, Invoicing, Expenses, Subscriptions, Contracts, Purchasing, Reports
+- People and records: Contacts, CRM, Catalog, Templates, Library
 - Personal: Finance, Inventory
 - Platform: System, Portal

@@ -1,7 +1,0 @@
-# Keeps two things that are not part of the site from being served, on a host that reads
-# .htaccess (Apache): a `.git` folder, when the site is put in place with `git clone` or
-# `git pull`, and this folder's README.md, which is written for the person who hosts it.
-# If every page answers 500 after an upload, the host does not allow these lines: delete
-# this file, and keep `.git` and README.md out of the web folder by hand instead.
-RedirectMatch 404 ^/\.git
-RedirectMatch 404 ^/README\.md$

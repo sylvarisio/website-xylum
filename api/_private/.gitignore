@@ -1,4 +1,0 @@
-# The door's data (who asked for an invitation) is never committed.
-*
-!.gitignore
-!.htaccess

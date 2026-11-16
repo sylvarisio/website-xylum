@@ -1,0 +1,3 @@
+node_modules/
+# The list of requests and settings.json with the mailbox password: never in git.
+private/
