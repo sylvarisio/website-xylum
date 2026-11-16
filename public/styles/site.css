@@ -508,6 +508,10 @@ section[id] { scroll-margin-top: 48px; }
 .strengths .shot.charges .fade-b { display: none; }
 .strengths .shot.reminder { --site-fw: 662.666; --site-fh: 390; --site-iw: 1174; --site-il: -222; --site-it: -262; }
 .strengths .shot.reminder .fade-b { --site-fb: 75; }
+/* holding: strength 3's picture is not in kit v5 (it draws a band of words). Sam asked for
+   the real screen here. Desk: kit v2's crop "03 the day" of the home capture, on the plate's
+   ground. Phone numbers are below, with the other phone crops. */
+.strengths .shot.opening { --site-fw: 853; --site-fh: 366; --site-iw: 1607; --site-il: -330; --site-it: -158; background: var(--xy-plate); }
 .strengths .shot.audit { --site-fw: 441.333; --site-fh: 285; --site-iw: 425; --site-il: 0; --site-it: -614; }
 .strengths .shot.audit .fade-b { --site-fb: 60; }
 .strengths .shot.audit .fade-r { --site-fr: 70; }
@@ -524,6 +528,8 @@ section[id] { scroll-margin-top: 48px; }
 
 /* under 600: the phone captures and their crops */
 @media (max-width: 599.98px) {
+  /* kit v5's own phone crop of the home tab */
+  .strengths .shot.opening { --site-fw: 335; --site-fh: 376; --site-iw: 366; --site-il: -16; --site-it: -293; background: var(--xy-ground); }
   .strengths .shot.charges { --site-fw: 287; --site-fh: 204; --site-iw: 287; --site-il: 0; --site-it: -421; }
   .strengths .shot.charges .fade-b { display: block; --site-fb: 28; }
   .strengths .shot.charges .fade-r { display: none; }
