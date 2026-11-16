@@ -126,16 +126,22 @@ const INVALID = Symbol('not UTF-8');
 function readSettings(env, privateDir) {
   const notes = [];
   let file = {};
+  // What became of the file, for /healthz: 'read', 'none' (there is no file) or 'ignored'
+  // (it is there and could not be used). One word, and nothing from inside the file.
+  let fileState = 'none';
   const where = path.join(privateDir, SETTINGS_FILE);
   try {
     const parsed = JSON.parse(fs.readFileSync(where, 'utf8'));
     if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
       file = parsed;
+      fileState = 'read';
     } else {
+      fileState = 'ignored';
       notes.push(`${SETTINGS_FILE} is not one JSON object; it was ignored`);
     }
   } catch (error) {
     if (error.code !== 'ENOENT') {
+      fileState = 'ignored';
       notes.push(`${SETTINGS_FILE} could not be read (${error.code || 'not valid JSON'}); it was ignored`);
     }
   }
@@ -170,7 +176,7 @@ function readSettings(env, privateDir) {
     trustProxy: whole('TRUST_PROXY', 0, 0, 10),
     addressLimit: whole('ADDRESS_LIMIT', ADDRESS_LIMIT, 0, 100000),
   };
-  return { settings, notes };
+  return { settings, notes, fileState };
 }
 
 /** The nodemailer transport options. Port 465 is TLS from the start; any other port
@@ -498,7 +504,7 @@ function createApp(options = {}) {
     // Reported as "list not writable" below and on /healthz.
   }
   const untightened = tighten(privateDir);
-  const { settings, notes } = readSettings(env, privateDir);
+  const { settings, notes, fileState } = readSettings(env, privateDir);
   if (untightened.length > 0) {
     notes.push(`the private folder or its files could not be made owner-only (${untightened.join(', ')}); check their modes`);
   }
@@ -508,8 +514,14 @@ function createApp(options = {}) {
 
   let mailer = null;
   let mailState = 'off';
+  // Why mail is off, as one fixed word for /healthz: 'address', 'settings' or 'package'.
+  // On 2026-11-16 the live site said "mail: off" three times for three different causes
+  // (a broken settings file, the package not installed after a pull by hand, and then
+  // nothing wrong at all), and each took a round of guessing.
+  let mailWhy = 'settings';
   if (!settings.mailTo || !settings.mailFrom) {
     mailState = 'off (MAIL_TO or MAIL_FROM is not a plain address)';
+    mailWhy = 'address';
   } else if (options.transport) {
     mailer = options.transport;
     mailState = 'on';
@@ -523,6 +535,7 @@ function createApp(options = {}) {
       mailState = 'on';
     } catch {
       mailState = 'off (nodemailer is not installed: run npm install)';
+      mailWhy = 'package';
     }
   }
   let mailsInFlight = 0;
@@ -708,7 +721,11 @@ function createApp(options = {}) {
       list: (await list.writable()) ? 'writable' : 'not writable',
       forwarded,
       trust_proxy: settings.trustProxy,
+      settings_file: fileState,
     };
+    // 'settings': SMTP_USER or SMTP_PASS is missing. 'address': MAIL_TO or MAIL_FROM is
+    // not one plain address. 'package': nodemailer is not installed (run the build).
+    if (!mailer) state.mail_off_because = mailWhy;
     if (forwarded && settings.trustProxy === 0) state.advice = 'set TRUST_PROXY=1';
     const body = JSON.stringify(state);
     finish(res, 200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }, body);

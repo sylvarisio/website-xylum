@@ -149,16 +149,28 @@ After every first deploy, and after changing a setting:
    `writable`, and if it shows `forwarded: true` with `trust_proxy: 0`, set
    `TRUST_PROXY=1` and restart BEFORE anyone sees the page. A good answer behind
    Infomaniak's proxy looks like
-   `{"ok":true,"mail":"on","list":"writable","forwarded":true,"trust_proxy":1}`.
-   `mail` other than `on` means no mail goes out (no password, or a bad address: the
-   program's first lines say which); `list` other than `writable` means nobody can join:
-   fix the folder first. When the answer also carries `"advice":"set TRUST_PROXY=1"`, that
-   is the same thing said once more.
+   `{"ok":true,"mail":"on","list":"writable","forwarded":true,"trust_proxy":1,"settings_file":"read"}`.
+   `list` other than `writable` means nobody can join: fix the folder first. When the
+   answer also carries `"advice":"set TRUST_PROXY=1"`, that is the same thing said once
+   more. When `mail` is `off`, no mail goes out, and two more words say why:
+
+   | `/healthz` shows | it means | do this |
+   |---|---|---|
+   | `"settings_file":"ignored"` | `private/settings.json` is there and cannot be read: a missing or extra comma, a curly quote | fix the file; the console's first lines name the fault |
+   | `"settings_file":"none"` | there is no `private/settings.json` beside `server.js` | fine if the settings are environment variables; else put the file there |
+   | `"mail_off_because":"settings"` | `SMTP_USER` or `SMTP_PASS` is missing or empty | add both, spelled exactly so |
+   | `"mail_off_because":"address"` | `MAIL_TO` or `MAIL_FROM` is not one plain address | write just `name@domain` |
+   | `"mail_off_because":"package"` | the mail package is not installed | run `npm ci --omit=dev` beside `server.js`, then restart |
 2. Open the signup page, fill in your own address, tick the box, send. You must land on
    "Thanks. You are on the list…".
 3. Check `private/requests.jsonl` has your line, and that the email arrived.
 4. Send the same address again: the same thanks, no new line, no new email.
 5. Delete your line.
+
+**When you test again later, use an address that is not on the list**, or empty the list
+first (`: > private/requests.jsonl`). An address that is already there gets the same
+thanks and no email, by design, which looks exactly like mail being broken. It cost an
+hour on the first evening.
 
 ## What a flood looks like
 
@@ -212,8 +224,17 @@ as a formula when a spreadsheet opens it. Read it as plain text.
 
 Publish again (`scripts/site-publish.sh <url>`) and redeploy in the panel. The `private/`
 folder is not in git (`.gitignore`), so a redeploy never carries a list or a password in
-and should never take one away. **Check, the first time, that Infomaniak keeps `private/`
-across a redeploy**: copy the list off first, redeploy, and see the line count is the same.
+and should never take one away. On Infomaniak (seen 2026-11-16) `private/` is kept across a
+`git pull`: the list and the settings were there after two.
+
+**A `git pull` by hand does not run the build.** Run it yourself before you restart, or
+the site comes back with mail off (`"mail_off_because":"package"`):
+
+```sh
+cd ~/sites/xylum.io && git pull && npm ci --omit=dev
+```
+
+Then restart the site in the panel and open `/healthz`.
 
 ## Retiring this door
 

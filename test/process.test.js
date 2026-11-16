@@ -33,27 +33,29 @@ test('/healthz: mail off and list writable, with nothing personal', async (t) =>
   const res = await s.request({ path: '/healthz' });
   assert.equal(res.status, 200);
   assert.equal(res.headers['cache-control'], 'no-store');
-  assert.deepEqual(JSON.parse(res.body), { ok: true, mail: 'off', list: 'writable', forwarded: false, trust_proxy: 0 });
+  assert.deepEqual(JSON.parse(res.body), {
+    ok: true, mail: 'off', list: 'writable', forwarded: false, trust_proxy: 0, settings_file: 'none', mail_off_because: 'settings',
+  });
   assert.ok(!res.body.toString().includes('ada'));
 });
 
 test('/healthz: mail on', async (t) => {
   const s = await start(t);
-  assert.deepEqual(JSON.parse((await s.request({ path: '/healthz' })).body), { ok: true, mail: 'on', list: 'writable', forwarded: false, trust_proxy: 0 });
+  assert.deepEqual(JSON.parse((await s.request({ path: '/healthz' })).body), { ok: true, mail: 'on', list: 'writable', forwarded: false, trust_proxy: 0, settings_file: 'none' });
 });
 
 test('/healthz: list not writable', async (t) => {
   const s = await start(t, {
     prepare: ({ privateDir }) => fs.mkdirSync(path.join(privateDir, 'requests.jsonl'), { recursive: true }),
   });
-  assert.deepEqual(JSON.parse((await s.request({ path: '/healthz' })).body), { ok: true, mail: 'on', list: 'not writable', forwarded: false, trust_proxy: 0 });
+  assert.deepEqual(JSON.parse((await s.request({ path: '/healthz' })).body), { ok: true, mail: 'on', list: 'not writable', forwarded: false, trust_proxy: 0, settings_file: 'none' });
 });
 
 test('/healthz behind a proxy with TRUST_PROXY at 0 says forwarded and gives the fixed advice', async (t) => {
   const s = await start(t);
   const res = await s.request({ path: '/healthz', headers: { 'X-Forwarded-For': '198.51.100.23' } });
   assert.deepEqual(JSON.parse(res.body), {
-    ok: true, mail: 'on', list: 'writable', forwarded: true, trust_proxy: 0, advice: 'set TRUST_PROXY=1',
+    ok: true, mail: 'on', list: 'writable', forwarded: true, trust_proxy: 0, settings_file: 'none', advice: 'set TRUST_PROXY=1',
   });
   // Nothing from the header itself.
   assert.ok(!res.body.toString().includes('198.51.100'));
@@ -62,7 +64,7 @@ test('/healthz behind a proxy with TRUST_PROXY at 0 says forwarded and gives the
 test('/healthz behind a proxy with TRUST_PROXY=1 says forwarded, with no advice', async (t) => {
   const s = await start(t, { env: { TRUST_PROXY: '1' } });
   const res = await s.request({ path: '/healthz', headers: { 'X-Forwarded-For': '198.51.100.23' } });
-  assert.deepEqual(JSON.parse(res.body), { ok: true, mail: 'on', list: 'writable', forwarded: true, trust_proxy: 1 });
+  assert.deepEqual(JSON.parse(res.body), { ok: true, mail: 'on', list: 'writable', forwarded: true, trust_proxy: 1, settings_file: 'none' });
 });
 
 test('a proxied request with TRUST_PROXY at 0 prints one warning, once, with no address', async (t) => {
@@ -130,9 +132,17 @@ test('a broken settings.json or a bad value is reported, never fatal', async (t)
   assert.equal(bad.settings.smtpPort, 587);
   assert.equal(bad.settings.mailTo, null);
   assert.equal(bad.notes.length, 4);
-  // And the server still runs, with mail off.
+  // What became of the file is one word, for /healthz.
+  assert.equal(readSettings({}, root).fileState, 'ignored');
+  assert.equal(readSettings({}, scratch(t)).fileState, 'none');
+  const good = scratch(t);
+  fs.writeFileSync(path.join(good, 'settings.json'), '{"TRUST_PROXY": 1}');
+  assert.equal(readSettings({}, good).fileState, 'read');
+  // And the server still runs, with mail off, and says in one word why.
   const s = await start(t, { env: { MAIL_TO: 'a@b.com, c@d.com' } });
-  assert.equal(JSON.parse((await s.request({ path: '/healthz' })).body).mail, 'off');
+  const health = JSON.parse((await s.request({ path: '/healthz' })).body);
+  assert.equal(health.mail, 'off');
+  assert.equal(health.mail_off_because, 'address');
   assert.equal((await s.post(form(GOOD))).headers.location, '/signup.html#joined');
 });
 
