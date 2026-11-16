@@ -1,258 +1,227 @@
-# site-server/ — the Xylum website as one small Node.js app
+# site/ — the Xylum marketing site
 
-## In plain words
+Seven static pages that say what Xylum is, show it working, and take requests for an
+invitation. It is plain HTML and CSS with one small script and no build step, and it asks
+no other host for anything. ADR-0081 records why it lives here and how a signup is stored;
+its amendment 2026-11-16 G records the current look ("site v5") and why the site now has a
+script, and amendments H and I the temporary form handler.
 
-This folder is a small program that runs the Xylum website. It does two jobs:
+**This folder is the pages only.** The program that serves them and answers the form is
+`../site-server/` (a small Node.js app); its README is the one to read for hosting.
 
-1. It sends the website's pages, pictures and styles to anyone who visits.
-2. It takes the invitation form on the signup page. When someone fills it in, the program
-   writes one line to a private list and then sends you one email about it.
-
-**The list is what counts.** If the line could not be written, the person is told to try
-again later and no email goes out. The email is only a notice, so a lost email loses
-nothing: the line is still on the list.
-
-It needs Node.js 20 or newer and one package, `nodemailer` (it sends the email). The
-pages themselves are in `../site/` in this repository, or in `public/` once published.
-
-When the Xylum app is hosted, the form's one address is pointed at the app instead, and
-this door is retired (see the end). The pages do not change.
-
-## Run it on your own computer
-
-```sh
-cd site-server
-npm install          # fetches nodemailer, the only package
-npm start            # then open http://localhost:8080
-npm test             # the tests: they start the real server on a free port
-```
-
-With no settings at all it runs and writes the list, with email off. The first line it
-prints says what it found, for example:
-
-```
-xylum site: port 8080, serving /…/site, mail off (SMTP_USER and SMTP_PASS are not set), list writable (/…/site-server/private/requests.jsonl)
-```
-
-Stop it with Ctrl-C. It finishes what it is doing, prints `closed` and exits.
-
-## Put it on Infomaniak
-
-The hosting repository is made by `scripts/site-publish.sh` (from this repository's root):
-it puts this folder at the top and the pages in `public/`. Never edit that repository by
-hand; the next publish replaces it.
-
-In the Infomaniak panel, create a **Node.js site** and give it:
-
-| field | value |
+| file | what it is |
 |---|---|
-| source | the Git repository `site-publish.sh` publishes to, branch `main` |
-| Node.js version | 20 or newer (22 or 24 if offered) |
-| build command | `npm ci --omit=dev` |
-| launch command | `npm start` (the same as `node server.js`) |
-| port | whatever the panel says; the program listens on the `PORT` it is given |
+| `index.html` | the home page: the sentence Xylum opens on, the real screens, four small working pictures, every app in one line |
+| `why-xylum.html` | seven strengths, each with the thing in the product that proves it |
+| `vs-traditional-erp.html` | Xylum beside a traditional ERP, in one table, and when an ERP is the better choice |
+| `who-its-for.html` | four kinds of small business, and a day with Xylum |
+| `faq.html` | short answers, each a `details` element the browser opens |
+| `signup.html` | **the signup screen.** Invitation only for now: the one form on the site |
+| `privacy.html` | what is kept when somebody asks for an invitation, and how to have it removed. Marked as a draft until it is signed off |
+| `sitemap.xml`, `robots.txt` | for search engines. Both name `https://xylum.io`, the one address the site is served from |
+| `llms.txt` | the short version for AI assistants: what Xylum is, the key facts, the pages |
+| `favicon.ico` | a copy of `frontend/public/favicon.ico` |
+| `ds/tokens/`, `ds/assets/fonts/` | **the design system.** Byte copies of the bundle's tokens and fonts (`frontend/vendor/design-system/`). Never edit one by hand. `bash scripts/site-ds-sync.sh` re-copies them; a backend test compares the bytes. |
+| `styles/fonts.css` | the bundle's `tokens/fonts.css` with its first line replaced and the font paths pointed at `ds/assets/fonts/`. Written by the same script. |
+| `styles/site.css` | the layout, built to site kit v5 (`docs/design/site-kit-v5.md`). Every colour, radius, shadow and easing is a `--xy-*` token. It writes no colour of its own, and a test holds it to that. |
+| `styles/noscript.css` | linked inside a `<noscript>`: only a browser that runs no script fetches it. It hides the controls that need the script and lays the 23 app lines out as a list. |
+| `scripts/site.js` | the one script: it makes the pictures move and the pickers pick. No dependency, not built, asks no server for anything, stores nothing. |
+| `shots/`, `shots/phone/` | screenshots of the real product, made by `bash scripts/site-shots.sh` (below) |
+| `icons/` | app icons, from the 2026-10-15 sales brochure |
+| `brand/` | `xylum-duotone.svg`, a byte-for-byte copy of `frontend/public/brand/xylum-duotone.svg`. Never edit it by hand. A backend test compares the bytes. To update it, copy the file again. Pre-commit leaves it alone. `xylum-mark.svg` is the same kind of copy, used as the tab icon. |
 
-Then put the settings in, either in the panel's environment variables (if it offers them)
-or in a file `private/settings.json` next to `server.js` (see below). Prefer the panel's
-environment variables for the password or token: then it is in no file at all. If the file
-is used, the program makes it readable by its owner only each time it starts (and the
-`private/` folder and the list too); if it cannot, its first lines say so. Then run the
-go-live test.
+## The look: site kit v5
 
-## The settings
+The design project draws the site. Its newest drawing is "xylum site v5" (2026-11-16), a
+prototype of all seven pages at 1440 and at 375 wide, and the site is built to it
+(ADR-0081 amendment G). The hand-over is copied word for word in
+`docs/design/site-kit-v5.md`. **Read that page before changing how anything looks**, and
+change nothing the drawing does not show: a new block, crop or sentence is the design
+project's to draw. (`docs/design/site-kit-v2.md` is the drawing it replaced.)
 
-Every setting is read from the environment first and then from `private/settings.json`. A
-setting that is missing or wrong never stops the website: it falls back to its default and
-the first lines it prints say so.
+How it was checked: every page was opened beside the prototype in a headless browser and
+every piece of text compared, its place, size, line height, weight and colour. Nothing is
+more than 1 px off at 1440 or at 375. Keep it that way: after a change to a page, measure
+again.
 
-| setting | what it is | default |
-|---|---|---|
-| `SMTP_USER` | the mailbox that sends the email, as its full address | none: mail is off |
-| `SMTP_PASS` | that mailbox's password | none: mail is off |
-| `SMTP_HOST` | the mail server | `mail.infomaniak.com` |
-| `SMTP_PORT` | `587` (STARTTLS) or `465` (TLS from the start); any other port must offer STARTTLS, or nothing is sent | `587` |
-| `MAIL_FROM` | the address the email is from | `hello@xylum.io` |
-| `MAIL_TO` | where the email goes | `hello@xylum.io` |
-| `HOURLY_LIMIT` | how many people can join in one clock hour, all together | `60` |
-| `TRUST_PROXY` | how many proxies sit in front of the program (see "What a flood looks like") | `0` |
-| `ADDRESS_LIMIT` | how many times one network address may send the form in an hour; `0` switches this brake off and leaves `HOURLY_LIMIT` | `5` |
+The rules that are easy to break:
 
-Read from the environment only: `PORT` (default 8080), `HOST` (default every address),
-`SITE_DIR` (default `public/` if it is there, else `../site`), `PRIVATE_DIR` (default
-`private/` next to `server.js`).
+- **Line height.** A rule sets a `line-height` only where the drawing sets one. Everything
+  else inherits `normal`. A stray `1.6` on the small labels once made the home page 90 px
+  too tall.
+- **Three widths.** From 1000 up, the desktop board: the column is the window less 144,
+  at most 1296. Under 1000, the phone board: one column, at most 640 wide, phone type.
+  Under 600, the phone board with the phone screenshots. Between the two drawn widths the
+  page only has to be sensible and unbroken.
+- **The design system's parts are redrawn in plain CSS.** The site cannot import React, so
+  Button, Eyebrow, Tag, Plate, DecisionCard and ToneChooser are written out in
+  `styles/site.css` from the values the bundle's own components render. When the bundle
+  changes one of them, change it here too.
+- **A button that does nothing in a picture is a `<span class="btn">`**, not a `<button>`:
+  "send", "edit", the plate's actions. A real `<button>` does something.
+- **Lowercase** menus, buttons, labels and headings, with the name written `xylum` there.
+  Sentences keep capitals, and so do the titles and descriptions in the `<head>`.
+- **The dark plate is in two places only:** the hero's sentence on the home page, and the
+  invitation block at the foot of a page. The signup screen has no invitation block.
+- **A screenshot is a crop** (below). Never a whole screen shrunk.
+- **After a new bundle is adopted** (`npm run ds:adopt`), run `bash scripts/site-ds-sync.sh`.
+  The site test fails until the copies match again, and CI runs it when the bundle changes.
 
-**The website sends through Lettermint** (Sam, 2026-11-16), a service made for mail that a
-program sends. Any mail service that offers SMTP works the same way; only these four
-values change. For Lettermint, `private/settings.json` is:
+Blocks marked `holding` in `styles/site.css` are places where the drawing is silent and
+something stands in: the hero stage between 1000 and 1279 wide, the form's three answers,
+the print block. Do not refine them. When the design project draws one, build to the
+drawing.
 
-```json
-{
-  "SMTP_HOST": "smtp.lettermint.co",
-  "SMTP_PORT": 587,
-  "SMTP_USER": "lettermint",
-  "SMTP_PASS": "the sending token of the Lettermint project",
-  "MAIL_FROM": "hello@xylum.io",
-  "MAIL_TO": "hello@xylum.io"
-}
-```
+## The script, and reading the site without it
 
-- `SMTP_USER` is the word `lettermint`, as it stands. `SMTP_PASS` is the project's sending
-  token, from the Lettermint dashboard. Treat the token like a password: it goes in this
-  file on the host (or in the panel's environment variables), never into git, a chat or
-  an email.
-- `MAIL_FROM` must be an address on a domain that is verified in Lettermint (`xylum.io`),
-  or Lettermint refuses the mail.
-- `MAIL_TO` is the mailbox you read. It can be the same address as `MAIL_FROM`.
+`scripts/site.js` runs one clock, a tick every 700 ms, as the kit draws it. On the home
+page it changes the hero's sentence, lights the app icons that sentence read, runs the
+four small pictures and serves the two pickers; on "who it's for" it walks the day.
 
-To send through a normal mailbox instead (for example one at Infomaniak): `SMTP_HOST`
-`mail.infomaniak.com`, `SMTP_USER` the mailbox's full address, `SMTP_PASS` its password.
+- **Every picture is written into the HTML in its finished state** (all chores done, the
+  whole chain lit, the letter's bars full). The script only moves them.
+- **With "reduce motion" switched on, the script does not tick.** The page stays as the
+  HTML wrote it.
+- **With no script,** `styles/noscript.css` hides the three controls marked
+  `needs-script` and shows every app's line as a list. The form and the phone menu never
+  needed script.
+- **It must not ask any server for anything or store anything.** A test reads the file for
+  `fetch`, storage, cookies and any address of another host.
 
-The password is never sent unless the mail server first agrees to encrypt the connection.
-If it does not, the email is not sent and the log says `mail failed: …`.
+## Rules every page keeps
 
-## Where the list lives, and how to read it
+`backend/xylum/signups/tests/test_site.py` holds all of these, on every page:
 
-`private/requests.jsonl`, next to `server.js` (or in `PRIVATE_DIR`). Only the program can
-read it: it is made readable by its owner only, and no address on the website reaches
-it. One person is one line:
+- **Plain voice.** Every sentence a person reads is 20 words or fewer, with no banned
+  word (`xylum/core/brain/voice.py`). That includes each page's search description.
+- **Nothing about running Xylum yourself** (U19), and no claim the product cannot back.
+- **One headline, its own title and description, and a canonical address** under
+  `https://xylum.io`. `sitemap.xml` lists exactly the pages that exist. A new page means
+  a new `<url>` line there.
+- **The same header on every page:** the brand lockup, then four links and the invitation
+  button; on a phone, a `details` menu with five rows and the button.
+- **The one form is on `signup.html`.** Other pages link to it. They never carry a copy of
+  the form, so the consent sentence is pinned in one place.
+- **One script, the site's own, and no inline script or handler.**
+- **No file in `shots/` that no page shows.**
 
-```json
-{"time":"2026-11-16T10:15:30Z","email":"ada@example.com","name":"Ada","consent":"Yes, email me when Xylum early access opens. Keep my address and name for that alone, and remove them when I ask.","list":"early-access"}
-```
+## Screenshots
 
-Read it over SSH or the panel's file manager. To count it: `wc -l private/requests.jsonl`.
-Someone already on the list who asks again is told they are on it and gets no second line
-and no second email. To remove a person who asks, delete their line (with the program
-stopped, or by writing the whole file back in one go).
+**How one is shown.** A frame holds the whole capture, scaled and moved so that only one
+part shows: `<figure class="shot …"><picture>…<img …></picture></figure>`.
+`styles/site.css` gives each frame the kit's numbers as custom properties: `--site-fw` and
+`--site-fh` (the frame as drawn), `--site-iw` (the width the capture is drawn at),
+`--site-il` and `--site-it` (its left and top), and `--site-fb` / `--site-fr` for a fade
+on an edge. The base rule turns them into shares of the frame's width, so a crop holds as
+the column grows or shrinks. Under 600 a media query swaps in the phone numbers and the
+`<picture>` swaps in the phone capture. The numbers come from the kit's "Screenshots"
+tables. Do not invent a crop.
 
-The email you get for each new line:
+**How they are made.** `bash scripts/site-shots.sh` remakes every file in `shots/`. It
+needs `npm ci` to have run in `frontend/` once (it uses that folder's Playwright). It boots
+the throwaway end-to-end stack (`deploy/compose.e2e.yaml`) under its own name and random
+loopback ports, fills it with the sample business (`seed_demo --wipe`), and runs
+`scripts/site-shots.mjs`. That script takes each shot at device scale 2, then prints each
+file's size for the `<img>` `width` and `height`. The stack is torn down at the end. It
+never touches the shared stack and never reads `deploy/.env`. It takes about five minutes.
 
-```
-From: Xylum website <hello@xylum.io>
-Reply-To: ada@example.com
-Subject: Xylum invitation request: ada@example.com
+It fails on any error response, any request to another host, or a screen with no sample
+name on it. Run it after any visible change to the product, then check each crop in the
+pages against the new shot: a screen that moved needs its crop drawn again. The hero's
+three sentences and the cards' figures are typed into `index.html` from the same sample
+book: check those against the new shots too.
 
-time: 2026-11-16T10:15:30Z
-email: ada@example.com
-name: Ada
-consent: Yes, email me when Xylum early access opens. …
-list: early-access
-```
+**Phone captures.** `SITE_SHOTS_PHONE_DIR=<folder outside site/> bash scripts/site-shots.sh`
+also captures the same seven screens at 375 wide, the first screen and the whole page.
+The site shows six of the first-screen captures under 600 wide, from `shots/phone/`: copy
+those six there by hand. `shots/phone/invoice-letter.png` is the design project's own
+slice of the invoice capture (the letter, 1125 x 2100); cut it again from
+`invoice-full.png` after a re-shoot.
 
-Replying answers the person.
+## Print
 
-## The go-live test
+The kit lists the A4 brochure as not in this package, and its boards still show the
+earlier look. The `@media print` block at the end of the base styles is a holding
+position: it leaves the menu, the doors and the invitation block off paper and nothing
+more. `node scripts/site-brochure.mjs <out.pdf>` still prints the home page; the result is
+not a designed brochure until the design project draws one.
 
-After every first deploy, and after changing a setting:
+## The signup screen
 
-1. Open `/healthz` (`https://<the site>/healthz`): `mail` must be `on`, `list` must be
-   `writable`, and if it shows `forwarded: true` with `trust_proxy: 0`, set
-   `TRUST_PROXY=1` and restart BEFORE anyone sees the page. A good answer behind
-   Infomaniak's proxy looks like
-   `{"ok":true,"mail":"on","list":"writable","forwarded":true,"trust_proxy":1,"settings_file":"read"}`.
-   `list` other than `writable` means nobody can join: fix the folder first. When the
-   answer also carries `"advice":"set TRUST_PROXY=1"`, that is the same thing said once
-   more. When `mail` is `off`, no mail goes out, and two more words say why:
+Xylum is invitation only (Sam, 2026-11-12, decision `signups-stay-invite-only`). So
+`signup.html` does not open an account. It takes a request for an invitation, and tells a
+person who already has one to use the link in their invitation email.
 
-   | `/healthz` shows | it means | do this |
-   |---|---|---|
-   | `"settings_file":"ignored"` | `private/settings.json` is there and cannot be read: a missing or extra comma, a curly quote | fix the file; the console's first lines name the fault |
-   | `"settings_file":"none"` | there is no `private/settings.json` beside `server.js` | fine if the settings are environment variables; else put the file there |
-   | `"mail_off_because":"settings"` | `SMTP_USER` or `SMTP_PASS` is missing or empty | add both, spelled exactly so |
-   | `"mail_off_because":"address"` | `MAIL_TO` or `MAIL_FROM` is not one plain address | write just `name@domain` |
-   | `"mail_off_because":"package"` | the mail package is not installed | run `npm ci --omit=dev` beside `server.js`, then restart |
-2. Open the signup page, fill in your own address, tick the box, send. You must land on
-   "Thanks. You are on the list…".
-3. Check `private/requests.jsonl` has your line, and that the email arrived.
-4. Send the same address again: the same thanks, no new line, no new email.
-5. Delete your line.
+The form on `signup.html` posts to Xylum's own door,
+`POST /api/v1/signups/public/early-access/` (the `signups` module). The door answers a
+browser with a redirect to the list's `return_url`, ending in `#joined`, `#check-details`
+or `#try-later`. `signup.html` shows the matching sentence with CSS `:target`, so the
+list's `return_url` must be the address of `signup.html`. The checkbox label is
+`signups.services.DEFAULT_CONSENT_TEXT`, word for word, and
+`backend/xylum/signups/tests/test_site.py` holds the two together.
 
-**When you test again later, use an address that is not on the list**, or empty the list
-first (`: > private/requests.jsonl`). An address that is already there gets the same
-thanks and no email, by design, which looks exactly like mail being broken. It cost an
-hour on the first evening.
+### Until the hosted app exists: the stand-in door
 
-## What a flood looks like
+The hosted app is not standing yet, and the site goes live before it (ADR-0081 amendments
+H and I). So the site's own server, `../site-server/server.js`, answers at the same
+address. It applies the same checks and sends the browser back to the same three answers.
+For each good request it writes one line to a private list (time, email, name, the
+consent sentence, the list; no IP address, no browser, no referrer) and mails the same
+five facts to `hello@xylum.io`. The list is what counts: no line, no mail.
 
-Two brakes, both on purpose:
+Everything about it, its settings, its tests and how to retire it, is in
+`../site-server/README.md`. The first stand-in was a PHP file under `site/api/`; it was
+removed the same day, when the host turned out to run Node.js sites.
 
-- **All together**: after `HOURLY_LIMIT` new people in one clock hour (60 by default),
-  everyone else is told "Too many tries just now" until the next hour. The count is read
-  from the list, so a restart does not reset it.
-- **Per sender**: one network address may send the form `ADDRESS_LIMIT` times an hour (5
-  by default). The next one is told to try later. Refused tries count too.
+**When the app's own door is reachable at this address:** add the people in the private
+list to the app's `early-access` list, stop answering the form in `site-server/` (its
+README says how), put the sentence about "Xylum's own database" back on `privacy.html`,
+and work through "Hosting" steps 2 to 4 below.
 
-The hourly limit is the one that really bounds things: at most `HOURLY_LIMIT` new lines,
-and so at most `HOURLY_LIMIT` emails to you, in an hour. Each of those emails has a
-Reply-To that a stranger typed, so read it before you reply. The per-sender brake only
-slows one sender down: anyone who can change their network address (a phone network, a
-VPN) can step round it.
+## Hosting
 
-If the program sits behind Infomaniak's proxy, every visitor looks like the proxy, and the
-per-sender brake would stop everyone together after 5 tries. `/healthz` shows this:
-`forwarded: true` means the request came through a proxy that names the visitor in an
-`X-Forwarded-For` header. Then set `TRUST_PROXY` to `1` (one proxy in front), which makes
-the program read the visitor's address from that header. While it is still `0`, the
-program also prints one warning line the first time such a request arrives. Never set it
-higher than the number of proxies really in front: a visitor could then write their own
-address and step round the brake.
+Sam hosts the site, on an Infomaniak Node.js site. agent_os never deploys it.
 
-If the host's proxy names the visitor in another header (for example `X-Real-IP`) and not
-in `X-Forwarded-For`, `/healthz` shows `forwarded: false`, and the program cannot tell
-visitors apart at all. The per-sender brake then counts everyone together: the form allows
-`ADDRESS_LIMIT` tries an hour **in total**, 5 by default, and then tells everyone to try
-later. The fix is to raise `ADDRESS_LIMIT` (for example to `60`) or set it to `0`, which
-leaves only the hourly limit.
+**How it gets there.** `scripts/site-publish.sh <git-url>` makes the repository the host
+pulls: `site-server/` at the top (the program, `package.json`) and this folder, without
+its README, as `public/`. It publishes what is committed on main, as one commit. Sam's is
+`git@github.com:sylvarisio/website-xylum.git` (2026-11-16). That repository is an output:
+change the site here, publish again, and never edit it there. **Publish after every merge
+that touches `site/` or `site-server/`.**
 
-## What the program refuses on purpose
+**On the host:** build command `npm ci --omit=dev`, launch command `npm start`, and the
+mailbox settings. The settings table, the go-live test, what a flood looks like and what
+a redeploy does to the private list are in `../site-server/README.md`.
 
-- **Anything under `/.well-known/`** is answered "not found", like every name that starts
-  with a dot. While the host handles the certificate (HTTPS), nothing there is needed. If a
-  service ever asks you to put a file there to prove you own the domain, this program will
-  not serve it.
-- **HSTS** (the header that tells browsers to use HTTPS only) is the host's to set, not
-  this program's: behind the host's proxy, the program does not know whether the visitor
-  came in over HTTPS.
+Before it goes live, also work through this list (steps 2 to 4 are for the app's own door
+and wait until the stand-in is retired):
 
-## Never open the list in a spreadsheet
-
-Do not open `requests.jsonl`, or any copy of it turned into CSV, in Excel, LibreOffice or
-Google Sheets. A name is whatever a stranger typed, and a name that starts with `=` is run
-as a formula when a spreadsheet opens it. Read it as plain text.
-
-## Redeploy
-
-Publish again (`scripts/site-publish.sh <url>`) and redeploy in the panel. The `private/`
-folder is not in git (`.gitignore`), so a redeploy never carries a list or a password in
-and should never take one away. On Infomaniak (seen 2026-11-16) `private/` is kept across a
-`git pull`: the list and the settings were there after two.
-
-**A `git pull` by hand does not run the build.** Run it yourself before you restart, or
-the site comes back with mail off (`"mail_off_because":"package"`):
-
-```sh
-cd ~/sites/xylum.io && git pull && npm ci --omit=dev
-```
-
-Then restart the site in the panel and open `/healthz`.
-
-## Retiring this door
-
-When the Xylum app is hosted, route `/api/v1/signups/public/early-access/` to the app, so
-the form posts there. Then bring the lines of `private/requests.jsonl` into the app's
-`early-access` list, and delete the file. Until the file is deleted, those people's details
-are kept here.
-
-## What is not kept
-
-The per-sender brake holds each sender's network address in memory for at most an hour,
-to count their tries. It is never written to disk, never sent anywhere, and it is gone on
-restart. Nothing else about a visitor is kept: no log of pages read, no cookies.
-
-## The tests
-
-`npm test` (which is `node --test`) runs every file in `test/`: the pages and every way a
-request might try to reach a file that is not public, the form's every answer, the brakes,
-the settings, a real SMTP conversation, and the program started and stopped as the host
-does. `backend/xylum/signups/tests/test_site_server.py` checks that the consent sentence,
-the form's address and its three answers still match the app and the page.
+1. **Confirm the removal mailbox.** The privacy note tells people to write to
+   `privacy@sylvaris.io` (Sam, 2026-11-02 — it was `privacy@sylvaris.net`, which was never
+   confirmed to exist). It is a **Sylvaris** address and not a Xylum one on purpose: the
+   person who answers a privacy request is the data controller, which is the company, and
+   that stays true if the product is ever renamed or sold. Sam also wants
+   `privacy@xylum.io` to reach the same mailbox, so somebody who guesses the product
+   address is not writing into a void — forward it, do not print it here as well.
+   **CONFIRMED by Sam, 2026-11-02:** *"email works and confirmed as it is already in
+   used"* — the mailbox exists, receives, and is already a working address rather than one
+   created for this page. So this is no longer a precondition and no later audit should
+   re-raise it. It had been carried as an assumption since 2026-10-17 and flagged twice
+   without anybody checking; the lesson is that the check cost one email.
+2. **Create and enable the list on the Xylum instance.** A list starts disabled.
+   - Create it: `signups_create_list` with `slug` `early-access` and `return_url` set to the
+     signup screen's own https URL: `https://xylum.io/signup.html`. The three answers a
+     person is sent back to live on that page, not on the home page.
+   - Turn it on: `signups_update_list` with `enabled=true`.
+   - Both work over MCP, or over REST at `POST /api/v1/signups/signup-lists/` and a `PATCH`
+     on the list.
+3. **If the site is served from a different host than the Xylum instance,** make the form
+   `action` in `signup.html` absolute, pointing at that instance:
+   `https://<xylum-host>/api/v1/signups/public/early-access/`. A relative action only
+   works when the page and the instance share a host.
+4. **Body size is already fenced.** The instance's Caddy config limits the signup door's
+   request body to 4096 bytes. Nothing to do here; check it is still in place.
+5. **Serve it at `https://xylum.io`.** Every page's canonical link, `sitemap.xml`,
+   `robots.txt` and `llms.txt` name that address (Sam, 2026-11-02: "Yes, one domain").
+   If the site is ever served from another address, change `SITE_ORIGIN` in the test and
+   every file the test then fails on.
