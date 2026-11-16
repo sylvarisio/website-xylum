@@ -1,0 +1,8 @@
+/* v1.25 · accessibility baseline. Safe beside any app reset: every selector is wrapped in :where(), so it has zero specificity
+   and an app rule of the same kind wins. Only the reduced-motion rule uses !important, on purpose. Load it even when base.css is skipped. */
+:where(input, textarea)::placeholder { color: var(--xy-text-faint); }
+:where(:focus-visible) { outline: 2px solid var(--xy-focus); outline-offset: 2px; }
+:where(*)::selection { background: var(--xy-teal-halo); }
+@media (prefers-reduced-motion: reduce) {
+  :where(*, *::before, *::after) { transition-duration: 1ms !important; animation-duration: 1ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+}

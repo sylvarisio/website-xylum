@@ -1,0 +1,85 @@
+:root {
+  /* grounds & surfaces */
+  --xy-ground: #EDEFEA;
+  --xy-ground-2: #F2F3EF;
+  --xy-surface: #FFFFFF;
+  --xy-surface-soft: #F7F8F5;
+  --xy-surface-field: #F7F8F5;
+  --xy-surface-note: #EEF0EB;
+  --xy-avatar: #E0E4DE;
+  /* tints (fills, hovers, active) */
+  --xy-tint: #E6E9E4;
+  --xy-tint-hover: #E3E7E1;
+  --xy-tint-active: #DFE4DD;
+  --xy-tint-press: #DCE1DA;
+  /* lines */
+  --xy-line: #D9DDD5;
+  --xy-line-soft: #ECEEEA;
+  --xy-line-card: #E1E4DE;
+  --xy-line-strong: #D2D7CF;
+  --xy-line-rule: #DCE0D9;
+  --xy-line-bar: #CDD2CA;
+  --xy-line-timeline: #C9CFC6;
+  /* ink */
+  --xy-ink: #16201B;
+  --xy-text: #1F2622;
+  --xy-text-body: #3A423D;
+  --xy-text-fact: #2E3530;
+  --xy-text-2: #4A524C;
+  --xy-text-muted: #6B736D;
+  --xy-text-faint: #7A827C;
+  --xy-text-disabled: #9AA39C;
+  --xy-text-ghost: #B5BCB4;
+  /* brand green / teal */
+  --xy-brand: #2E6F64;
+  --xy-teal: #2E7D6F;
+  --xy-teal-halo: #DCEBE6;
+  /* ink buttons */
+  --xy-ink-button: #1B261D;
+  --xy-on-ink: #F2F4EE;
+  /* signal: decisions / late */
+  --xy-alert: #A3253D;
+  --xy-alert-tint: #FBDAD7;
+  --xy-alert-soft: #F3E3DF;
+  --xy-alert-soft-ink: #8E3A2E;
+  /* status — pending (amber, from the brand ochre) and ok (canopy green) */
+  --xy-pending: #B17834;
+  --xy-pending-ink: #6F4B21;
+  --xy-pending-tint: #F3E8D7;
+  --xy-ok: #5A7F3D;
+  --xy-ok-ink: #405A26;
+  --xy-ok-tint: #E2EBD8;
+  /* the plate (dark olive hero) */
+  --xy-plate: #232E22;
+  --xy-plate-card: #1E281D;
+  --xy-plate-line: #344033;
+  --xy-plate-line-strong: #34423A;
+  --xy-plate-hover: #2C392B;
+  --xy-plate-sunken: #121A14;
+  --xy-plate-light: #E6EAE1;
+  --xy-plate-light-hover: #C9DED4;
+  --xy-on-plate: #D7DDD1;
+  --xy-on-plate-strong: #F2F4EE;
+  --xy-on-plate-label: #A9B3A3;
+  --xy-on-plate-muted: #8C978A;
+  --xy-on-plate-quiet: #7F8A7E;
+  --xy-on-plate-dim: #4E5A4F;
+  --xy-on-plate-brand: #C9D1C3;
+  --xy-plate-stamp-line: #2F3D31;
+  --xy-plate-alert-bg: #3A322B;
+  --xy-plate-alert: #C9A196;
+  --xy-plate-alert-bar: #B88C80;
+  --xy-plate-sage-bg: #2E3A2C;
+  --xy-plate-sage: #AEB9A6;
+  --xy-sage-dot: #8C9A84;
+  --xy-plate-edge: none; /* @kind shadow */
+  /* semantic aliases */
+  --xy-bg-page: var(--xy-ground);
+  --xy-bg-bar: var(--xy-ground-2);
+  --xy-bg-card: var(--xy-surface);
+  --xy-fg: var(--xy-text);
+  --xy-fg-muted: var(--xy-text-muted);
+  --xy-divider: var(--xy-line-soft);
+  --xy-focus: var(--xy-teal);
+  --xy-count: var(--xy-alert);
+}

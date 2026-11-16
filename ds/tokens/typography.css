@@ -1,0 +1,28 @@
+:root {
+  --xy-font-sans: 'Albert Sans', system-ui, sans-serif;
+  --xy-font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --xy-fs-display: 44px;   /* page greeting */
+  --xy-fs-plate: 27px;     /* plate sentence, KPI values */
+  --xy-fs-amount: 23px;    /* decision card amount */
+  --xy-fs-title: 22px;     /* decision card title */
+  --xy-fs-panel: 18px;     /* detail panel title */
+  --xy-fs-lead: 16px;
+  --xy-fs-body: 15px;      /* card body copy, prompt */
+  --xy-fs-ui: 14px;        /* nav, buttons */
+  --xy-fs-small: 13px;
+  --xy-fs-meta: 12px;
+  --xy-fs-eyebrow: 11px;   /* mono uppercase labels */
+  --xy-fs-micro: 10px;     /* small tags, counts */
+  --xy-fw-light: 300; /* @kind font */
+  --xy-fw-regular: 400; /* @kind font */
+  --xy-fw-medium: 500; /* @kind font */
+  --xy-fw-semibold: 600; /* @kind font */
+  --xy-lh-tight: 1; /* @kind font */
+  --xy-lh-ui: 1.4; /* @kind font */
+  --xy-lh-plate: 1.5; /* @kind font */
+  --xy-lh-body: 1.7; /* @kind font */
+  --xy-track-display: -.01em; /* @kind font */
+  --xy-track-eyebrow: .18em; /* @kind font */
+  --xy-track-label: .16em; /* @kind font */
+  --xy-track-tag: .08em; /* @kind font */
+}

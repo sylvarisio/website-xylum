@@ -1,0 +1,12 @@
+:root {
+  --xy-shadow-card: 0 1px 3px rgba(31,38,34,.06);
+  --xy-shadow-selected: 0 0 0 1.5px rgba(35,46,34,.55), 0 4px 16px rgba(35,46,34,.08);
+  --xy-shadow-hover: 0 0 0 1.5px rgba(35,46,34,.35), 0 4px 14px rgba(35,46,34,.08);
+  --xy-shadow-bar: 0 10px 32px rgba(31,38,34,.16);
+  --xy-shadow-launcher: 0 0 0 1px rgba(31,38,34,.06), 0 18px 48px rgba(31,38,34,.18);
+  --xy-shadow-drawer: 0 0 40px rgba(31,38,34,.15);
+  --xy-shadow-peek: 0 10px 32px rgba(20,26,22,.16); /* v1.41 · the lower of two panes: CardStack peek, the chat panel */
+  --xy-shadow-stack: 0 18px 48px rgba(20,26,22,.22); /* v1.41 · the upper pane: CardStack card, the chat side canvas */
+  --xy-scrim: rgba(31,38,34,.28);
+  --xy-fade-ground: linear-gradient(to top, #EDEFEA 0%, #EDEFEA 45%, rgba(237,239,234,.85) 70%, rgba(237,239,234,0) 100%); /* @kind other */
+}

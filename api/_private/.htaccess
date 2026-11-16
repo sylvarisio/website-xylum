@@ -1,0 +1,10 @@
+# The invitation door's private files: the request log and the hourly counter.
+# Never served. The files are also named `.ht*`, which Apache refuses by default,
+# so they stay private even where this file is ignored (AllowOverride None).
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+</IfModule>

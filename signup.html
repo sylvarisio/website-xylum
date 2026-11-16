@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign up for Xylum: ask for an invitation</title>
+  <meta name="description" content="Xylum is invitation only for now. Leave your email address, and we will write to you once, when there is a place for you.">
+  <meta name="referrer" content="no-referrer">
+  <link rel="canonical" href="https://xylum.io/signup.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Xylum">
+  <meta property="og:title" content="Xylum is invitation only, for now">
+  <meta property="og:description" content="Leave your email address, and we will write to you once, when there is a place for you.">
+  <meta property="og:url" content="https://xylum.io/signup.html">
+  <meta property="og:image" content="https://xylum.io/shots/home.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="brand/xylum-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles/fonts.css">
+  <link rel="stylesheet" href="ds/tokens/colors.css">
+  <link rel="stylesheet" href="ds/tokens/typography.css">
+  <link rel="stylesheet" href="ds/tokens/spacing.css">
+  <link rel="stylesheet" href="ds/tokens/effects.css">
+  <link rel="stylesheet" href="ds/tokens/motion.css">
+  <link rel="stylesheet" href="ds/tokens/base.css">
+  <link rel="stylesheet" href="ds/tokens/a11y.css">
+  <link rel="stylesheet" href="styles/site.css">
+  <noscript><link rel="stylesheet" href="styles/noscript.css"></noscript>
+  <script src="scripts/site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the page</a>
+<header class="masthead wrap">
+  <a class="logo" href="index.html"><img src="brand/xylum-duotone.svg" width="404" height="100" alt="Xylum"></a>
+  <nav class="links" aria-label="Main">
+    <a href="why-xylum.html">why xylum</a>
+    <a href="vs-traditional-erp.html">xylum vs ERP</a>
+    <a href="who-its-for.html">who it's for</a>
+    <a href="faq.html">questions</a>
+    <a class="btn sm" href="signup.html" aria-current="page">get an invitation</a>
+  </nav>
+  <details class="menu">
+    <summary class="btn sm secondary"><span class="when-closed">menu</span><span class="when-open">close</span></summary>
+    <nav aria-label="Main, on a phone">
+      <div class="rows">
+        <a href="index.html">home</a>
+        <a href="why-xylum.html">why xylum</a>
+        <a href="vs-traditional-erp.html">xylum vs ERP</a>
+        <a href="who-its-for.html">who it's for</a>
+        <a href="faq.html">questions</a>
+      </div>
+      <div class="go"><a class="btn lg" href="signup.html" aria-current="page">get an invitation</a></div>
+    </nav>
+  </details>
+</header>
+
+<main id="main">
+<div class="wrap">
+
+<!-- ── hero ───────────────────────────────────────────────── -->
+<section class="hero" aria-labelledby="hero-title">
+  <p class="eyebrow brand">invitation only, for now</p>
+  <h1 id="hero-title" class="h-page">ask for an invitation</h1>
+  <p class="lead">We are letting in a few independent consultants at a time.</p>
+</section>
+
+<!-- ── the form card. The form's contract is the public door's: four fields, no more ── -->
+<section id="early-access" class="panel ask" aria-label="The invitation form">
+  <!-- holding: the three answers the door sends a browser back to. Design has not redrawn them. -->
+  <p id="joined" class="answer ok" role="status">Thanks. You are on the list, and we will email you when it opens.</p>
+  <p id="check-details" class="answer" role="status">Something was missing. Check your email address and tick the box.</p>
+  <p id="try-later" class="answer" role="status">Too many tries just now. Please try again later.</p>
+
+  <form method="post" action="/api/v1/signups/public/early-access/">
+    <div class="field">
+      <label class="label" for="email">your email</label>
+      <input id="email" name="email" type="email" required maxlength="254" autocomplete="email" placeholder="you@company.example">
+    </div>
+    <div class="field">
+      <label class="label" for="name">your name (optional)</label>
+      <input id="name" name="name" type="text" maxlength="120" autocomplete="name">
+    </div>
+    <div class="hp" aria-hidden="true"><label for="website">Leave this empty</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+    <div class="consent">
+      <input id="consent" name="consent" type="checkbox" value="yes" required>
+      <label for="consent">Yes, email me when Xylum early access opens. Keep my address and name for that alone, and remove them when I ask.</label>
+    </div>
+    <button class="btn lg" type="submit">ask for an invitation</button>
+  </form>
+  <p class="caption">You get one email, when early access opens. No newsletter. See the <a href="privacy.html">privacy note</a>.</p>
+</section>
+
+<!-- ── how it goes: three steps ───────────────────────────── -->
+<section class="head" aria-labelledby="steps-title">
+  <p class="eyebrow">how it goes</p>
+  <h2 id="steps-title" class="h-sec">three steps, one email.</h2>
+  <p class="sec-lead">Already invited? Open the link in your invitation email.</p>
+</section>
+<div class="grid steps">
+  <article class="card small teal s4">
+    <div class="text">
+      <p class="label">1 · ask</p>
+      <h3 class="h-small">Leave your email address here.</h3>
+      <p class="body">Your name is optional.</p>
+    </div>
+  </article>
+  <article class="card small pending s4">
+    <div class="text">
+      <p class="label">2 · wait</p>
+      <h3 class="h-small">We open a few places at a time.</h3>
+      <p class="body">You hear from us once.</p>
+    </div>
+  </article>
+  <article class="card small ok s4">
+    <div class="text">
+      <p class="label">3 · start</p>
+      <h3 class="h-small">Your invitation arrives by email.</h3>
+      <p class="body">Its link sets up your account.</p>
+    </div>
+  </article>
+</div>
+
+</div>
+
+<!-- ── the doors ──────────────────────────────────────────── -->
+<nav class="doors-wrap wrap" aria-label="More about Xylum"><div class="doors">
+  <a href="why-xylum.html"><b>why xylum</b><span>Seven strengths, each with its proof.</span></a>
+  <a href="vs-traditional-erp.html"><b>xylum vs a traditional ERP</b><span>The differences, side by side.</span></a>
+  <a href="who-its-for.html"><b>who it's for</b><span>Four kinds of small business, and a day with Xylum.</span></a>
+  <a href="faq.html"><b>questions</b><span>Short, straight answers.</span></a>
+</div></nav>
+
+</main>
+
+<footer class="wrap"><div class="foot ruled">
+  <div class="who">
+    <img src="brand/xylum-duotone.svg" width="404" height="100" alt="Xylum" loading="lazy">
+    <p>Xylum by Sylvaris. Your whole business in one app, and it asks before it sends.</p>
+  </div>
+  <nav class="footnav" aria-label="Footer">
+    <a href="why-xylum.html">why xylum</a>
+    <a href="faq.html">questions</a>
+    <a href="vs-traditional-erp.html"><span class="long">xylum vs a traditional ERP</span><span class="short">xylum vs ERP</span></a>
+    <a href="signup.html">get an invitation</a>
+    <a href="who-its-for.html">who it's for</a>
+    <a href="privacy.html">privacy</a>
+  </nav>
+  <p class="note">The screens shown are Xylum's own. Their figures come from a sample book.</p>
+</div></footer>
+</body>
+</html>

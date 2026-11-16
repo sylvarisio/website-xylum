@@ -1,0 +1,15 @@
+:root {
+  --xy-ease: cubic-bezier(.22,1,.36,1); /* @kind other */          /* settle — FLIP, height, enters */
+  --xy-ease-standard: cubic-bezier(.2,.8,.2,1); /* @kind other */  /* bar slide, drawer */
+  --xy-ease-exit: cubic-bezier(.4,0,.2,1); /* @kind other */       /* leaving */
+  --xy-dur-fast: 150ms; /* @kind other */
+  --xy-dur-exit: 220ms; /* @kind other */
+  --xy-dur-drawer: 250ms; /* @kind other */
+  --xy-dur-bar: 300ms; /* @kind other */
+  --xy-dur-enter: 480ms; /* @kind other */
+  --xy-dur-move: 520ms; /* @kind other */
+  --xy-dur-height: 560ms; /* @kind other */
+  --xy-stagger: 50ms; /* @kind other */
+}
+@keyframes xy-pulse { 0%, 100% { opacity: 1 } 50% { opacity: .3 } } /* v1.27 · a turn in flight */
+@media (prefers-reduced-motion: reduce) { @keyframes xy-pulse { 0%, 100% { opacity: 1 } } }

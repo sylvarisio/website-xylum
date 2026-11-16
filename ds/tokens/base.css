@@ -1,0 +1,7 @@
+/* Page reset. Optional for apps with their own reset — the DS components do not depend on it. Accessibility rules live in a11y.css. */
+:root { color-scheme: light; }
+html, body { margin: 0; background: var(--xy-bg-page); color: var(--xy-fg); font-family: var(--xy-font-sans); -webkit-font-smoothing: antialiased; }
+*, *::before, *::after { box-sizing: border-box; }
+button, input { font-family: inherit; }
+a { color: var(--xy-text); text-decoration: underline; text-decoration-color: var(--xy-text-disabled); text-underline-offset: 3px; }
+a:hover { color: var(--xy-teal); }

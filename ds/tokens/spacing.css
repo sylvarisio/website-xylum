@@ -1,0 +1,52 @@
+:root {
+  --xy-space-1: 4px;
+  --xy-space-2: 6px;
+  --xy-space-3: 8px;
+  --xy-space-4: 10px;
+  --xy-space-5: 12px;
+  --xy-space-6: 14px;
+  --xy-space-7: 16px;
+  --xy-space-8: 18px;
+  --xy-space-9: 20px;
+  --xy-space-10: 22px;
+  --xy-space-11: 24px;
+  --xy-space-12: 28px;
+  --xy-space-13: 32px;
+  --xy-space-14: 44px;
+  --xy-space-15: 56px; /* v1.34 · the top end of a fluid gap (clamp); rarely a fixed gap */
+  /* v1.29 · hairline insets. Not spacing: optical nudges inside chips, tags, marks and focus rings. Never use them for gaps between blocks. */
+  --xy-inset-1: 1px;
+  --xy-inset-2: 2px;
+  --xy-inset-3: 3px;
+  --xy-radius-xs: 2px;   /* filter chips, inline buttons */
+  --xy-radius-sm: 3px;   /* buttons, tags, nav items */
+  --xy-radius-md: 4px;   /* command bar, chips */
+  --xy-radius-lg: 6px;   /* cards, panels, launcher */
+  --xy-radius-xl: 8px;   /* the plate */
+  --xy-radius-pill: 999px;
+  --xy-sidebar-w: 240px;
+  --xy-rail-w: 310px;
+  --xy-bar-max: 820px;
+  --xy-bar-h: 56px;
+  --xy-peek: 12px;
+  --xy-stand-gap: 30px;  /* v1.39 · a stand's main column, every module */
+  --xy-record-gap: 20px; /* v1.39 · a record screen's column */
+  --xy-rule-inset: 28px; /* vertical dividers stop this far from edges */
+  /* v1.33 · layout geometry. Not spacing. Off-scale offsets are written as calc() of these and the scale, never as a bare number. */
+  --xy-block-gutter: 96px; /* wiki line: the kind column */
+  --xy-bar-reach: 64px;    /* the zone above the floating bar that wakes it */
+  --xy-bar-clear: 120px;   /* scrolling content ends this far up so its last row clears the floating bar */
+  --xy-page-end: 80px;     /* bottom breathing room of a standalone page with no bar */
+  /* v1.34 · more geometry with a name */
+  --xy-rail-head-h: 26px;  /* the rail DetailPanel head row; its close button centres in it */
+  --xy-icon-field: 15px;   /* the leading icon inside an input; Input draws it at this size and pads its text past it */
+  /* v1.24 · hit targets. Components read these instead of fixed px, so touch screens get 44px. */
+  --xy-control-h: 40px;     /* inputs, md/lg buttons, sheet close */
+  --xy-control-h-sm: 32px;  /* sm buttons */
+  --xy-icon-hit: 30px;      /* icon-only buttons in rows (remove, more) */
+  --xy-icon-hit-sm: 26px;   /* clear inside an input */
+  --xy-icon-hit-lg: 38px;   /* command bar send */
+}
+@media (pointer: coarse) {
+  :root { --xy-control-h: 44px; --xy-control-h-sm: 44px; --xy-icon-hit: 44px; --xy-icon-hit-sm: 44px; --xy-icon-hit-lg: 44px; }
+}

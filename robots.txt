@@ -1,0 +1,6 @@
+# Xylum's marketing site. Every page is public and meant to be read, by people,
+# by search engines and by AI assistants. llms.txt is the short version for the last.
+User-agent: *
+Allow: /
+
+Sitemap: https://xylum.io/sitemap.xml

@@ -1,0 +1,40 @@
+# Xylum
+
+> Xylum is one app that runs a small service business. It keeps clients, quotes, projects, hours, invoices and costs in one place. It does the routine work every night, and what it writes for a person waits as a draft until that person says yes. It is invitation only for now.
+
+Xylum is made by Sylvaris. It is built for independent consultants, freelancers, and small studios and agencies: people who sell their time and their skill.
+
+Key facts:
+
+- One record for each client. Every app points to it, so nothing is typed twice.
+- Every night Xylum closes quotes that ran out, raises repeating charges, warns before a renewal, moves contracts on when their dates come, and drafts a reminder when a late invoice is due one.
+- Most apps open on one sentence that says what matters, not on a dashboard of numbers.
+- What Xylum writes for a person waits as a draft until they say yes. The assistant cannot approve its own work. Xylum can send payment reminders on its own only after a person switches that on.
+- Every change goes in an audit log. Xylum cannot edit or delete an entry: the database refuses it.
+- One step turns an accepted quote into a draft invoice with its lines filled in. Each project shows hours logged against its plan.
+- The assistant runs on a model from Anthropic. The key stays on the server, never in the app or its database.
+- Every app has its own screens, API and agent tools. An outside AI assistant can work with Xylum over MCP: it can read and prepare work, and it cannot send or delete.
+- More than one company can live under one sign-in, each with its own records. Most apps can be switched off, company by company.
+- Five languages: English, Spanish, Portuguese, Italian and French.
+- Xylum is not an accounting system. It does not keep the ledger or file taxes. The accountant does.
+- Xylum is not for factories, warehouses or large firms with many departments.
+- Prices are not set yet.
+- Sign-up is by invitation only for now. Anyone can ask for an invitation on the signup page.
+
+## Pages
+
+- [Home](https://xylum.io/): what Xylum is, what it does, and every app in one line
+- [Why Xylum](https://xylum.io/why-xylum.html): seven strengths, each with its proof
+- [Xylum vs a traditional ERP](https://xylum.io/vs-traditional-erp.html): the differences side by side, and when a traditional ERP is the better choice
+- [Who it's for](https://xylum.io/who-its-for.html): who Xylum fits, and who it does not
+- [Questions](https://xylum.io/faq.html): short answers to common questions
+- [Sign up](https://xylum.io/signup.html): ask for an invitation
+- [Privacy](https://xylum.io/privacy.html): what is kept when you ask for an invitation, and how to have it removed
+
+## The apps
+
+- Work: Projects, Timesheets, Calendar, Todo, Helpdesk, Booking, Wiki
+- Money: Sales, Invoicing, Expenses, Subscriptions, Contracts, Purchasing (Reports is coming soon)
+- People and records: Contacts, CRM, Catalog, Templates (Library is coming soon)
+- Personal: Finance, Inventory
+- Platform: System, Portal
